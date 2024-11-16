@@ -1,0 +1,10 @@
+
+SCHEMA >
+    `did` String `json:$.did`,
+    `type` String `json:$.event`,
+    `timestamp` DateTime64(3) `json:$.time`,
+    `_event` String `json:$`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYear(timestamp)"
+ENGINE_SORTING_KEY "timestamp"
