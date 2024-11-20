@@ -1,0 +1,8 @@
+SCHEMA >
+    `capture_time` DateTime `json:$.capture_time`,
+    `collection` String `json:$.collection`,
+    `record` String `json:$.record`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "collection"
+ENGINE_SORTING_KEY "capture_time"

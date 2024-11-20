@@ -1,6 +1,5 @@
-import {Command, Flags} from '@oclif/core'
-import {Firehose, MemoryRunner} from '@atproto/sync'
-import {IdResolver} from '@atproto/identity'
+import { Command, Flags } from '@oclif/core'
+import { Jetstream } from '@skyware/jetstream'
 
 export default class Start extends Command {
   static description = 'Start the bluebird feed'
@@ -11,58 +10,61 @@ export default class Start extends Command {
   ]
 
   static flags = {
-    tinybird_token: Flags.string({description: 'Tinybird token', required: true}),
-    tinybird_endpoint: Flags.string({description: 'Tinybird endpoint', required: true}),
-    tinybird_datasource: Flags.string({description: 'Tinybird datasource', required: true}),
+    token: Flags.string({ description: 'Tinybird token', required: true, char: 't' }),
+    endpoint: Flags.string({ description: 'Tinybird endpoint', required: true, char: 'e' }),
+    datasource: Flags.string({ description: 'Tinybird datasource', required: true, char: 'd' }),
+    cursor: Flags.string({ description: 'Cursor (Unix microseconds)', required: false, char: 'c' }),
   }
 
   async run() {
-    const {flags} = await this.parse(Start)
+    const { flags } = await this.parse(Start)
 
     this.log(`running start command with flags: ${JSON.stringify(flags)}`)
 
     let events = []
-    let currentTime = new Date()
+    let cursor = flags.cursor ? flags.cursor : Date.now() * 1000
     const batchSize = 5000
 
-    const idResolver = new IdResolver()
-    const runner = new MemoryRunner({
-      setCursor: (cursor) => {
-        // this.log(`cursor: ${cursor}`)
-      },
+    const captureEvent = (collection, event) => {
+      events.push(JSON.stringify({
+        capture_time: new Date().toISOString(),
+        collection,
+        record: event,
+      }))
+      if (events.length >= batchSize) {
+        sendToTinybird([...events], flags.token, flags.endpoint, flags.datasource)
+        this.log(`sent ${events.length} events to Tinybird`)
+        events = []
+      }
+    }
+
+    const jetstream = new Jetstream({
+      cursor,
+    });
+    jetstream.on('commit', (event) => {
+      captureEvent('commit', event)
+      // this.log(`commit: ${JSON.stringify(event)}`)
     })
-    const firehose = new Firehose({
-      idResolver,
-      runner,
-      service: 'wss://bsky.network',
-      handleEvent: async (event) => {
-        // this.log(`event: ${JSON.stringify(evt)}`)
-        events.push(event)
-        if (events.length >= batchSize) {
-          // this.log(`events: ${JSON.stringify(events)}`)
-          this.log(`time to ${batchSize} events: ${new Date() - currentTime}ms`)
-          currentTime = new Date()
-          sendToTinybird(events, flags.tinybird_token, flags.tinybird_endpoint, flags.tinybird_datasource)
-          events = []
-        }
-      },
-      onError: (err) => {
-        // console.error(err)
-      },
-      unauthenticatedHandles: true,
-      unauthenticatedCommits: true,
+    jetstream.on('account', (event) => {
+      captureEvent('account', event)
+      // this.log(`account: ${JSON.stringify(event)}`)
     })
-    firehose.start()
+    jetstream.on('identity', (event) => {
+      captureEvent('identity', event)
+      // this.log(`identity: ${JSON.stringify(event)}`)
+    })
+    jetstream.start()
   }
 }
 
 async function sendToTinybird(events, token, endpoint, datasource) {
   try {
-    // Convert events array to JSONL format
-    const jsonl = events.map((evt) => JSON.stringify(evt)).join('\n')
+    // Convert events array to JSONL string
+    const jsonl = events.join('\n')
 
     // Send to Tinybird Events API
-    const response = await fetch(`${endpoint}/v0/events?name=${datasource}`, {
+    let tinybird_url = `${endpoint}/v0/events?name=${datasource}`
+    const response = await fetch(tinybird_url, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,

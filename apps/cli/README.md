@@ -45,15 +45,16 @@ USAGE
   $ bluebird start
 
 FLAGS
-  --tinybird_token=<value>  (required) Tinybird token
-  --tinybird_endpoint=<value>  (required) Tinybird endpoint
-  --tinybird_datasource=<value>  (required) Tinybird datasource
+  --token=<value>  (required) Tinybird token
+  --endpoint=<value>  (required) Tinybird endpoint
+  --datasource=<value>  (required) Tinybird datasource
+  --cursor=<value>  (optional) Cursor (Unix microseconds)
 
 DESCRIPTION
   start the firehose
 
 EXAMPLES
-  $ bluebird start --tinybird_token=... --tinybird_endpoint=... --tinybird_datasource=...
+  $ bluebird start --token=... --endpoint=... --datasource=...
 ```
 
 _See code: [src/commands/start/index.ts](https://github.com/bsky_to_tinybird/bluebird/blob/v0.0.0/src/commands/start/index.ts)_
