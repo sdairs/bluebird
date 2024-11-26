@@ -1,6 +1,6 @@
-import { BatchProcessor } from './batch-processor.js'
+import { Destination } from '../destination.js'
 
-export class TinybirdProcessor extends BatchProcessor {
+export class TinybirdDestination extends Destination {
   constructor(token, endpoint, datasource) {
     super()
     this.token = token
@@ -9,7 +9,7 @@ export class TinybirdProcessor extends BatchProcessor {
   }
 
   async processBatch(events) {
-    const jsonl = events.join('\n')
+    const jsonl = events.map(event => JSON.stringify(event)).join('\n')
     const tinybird_url = `${this.endpoint}/v0/events?name=${this.datasource}`
     const response = await fetch(tinybird_url, {
       method: 'POST',

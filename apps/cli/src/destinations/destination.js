@@ -1,10 +1,10 @@
-export class BatchProcessor {
+export class Destination {
   constructor() {
     this.queue = []
     this.processing = false
     this.maxRetries = 5
     this.baseDelay = 1000 // 1 second
-    
+
     // Rate limiting configuration
     this.maxRequestsPerSecond = 5
     this.tokens = this.maxRequestsPerSecond
@@ -20,10 +20,12 @@ export class BatchProcessor {
     }
   }
 
+  async initialize() { }
+
   async waitForToken() {
     const now = Date.now()
     const timeSinceLastRefill = now - this.lastRefill
-    
+
     // Refill tokens based on time elapsed
     if (timeSinceLastRefill >= this.refillInterval) {
       this.tokens = this.maxRequestsPerSecond

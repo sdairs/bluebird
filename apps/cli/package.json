@@ -8,6 +8,7 @@
   },
   "bugs": "https://github.com/bsky_to_tinybird/bluebird/issues",
   "dependencies": {
+    "@clickhouse/client": "^1.8.1",
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
     "@oclif/plugin-plugins": "^5",

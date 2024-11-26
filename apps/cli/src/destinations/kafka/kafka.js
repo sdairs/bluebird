@@ -1,14 +1,14 @@
-import { BatchProcessor } from './batch-processor.js'
+import { Destination } from '../destination.js'
 import { Kafka } from 'kafkajs'
 
 // Set default to 900KB to leave room for message overhead
 const DEFAULT_BATCH_SIZE_BYTES = 900 * 1024 // 900KB
 
-export class KafkaProcessor extends BatchProcessor {
-  constructor({ brokers, topic, clientId = 'bluebird-producer', compression = 'gzip', username, password, saslMechanism = 'plain', maxBatchSizeBytes = DEFAULT_BATCH_SIZE_BYTES }) {
+export class KafkaDestination extends Destination {
+  constructor({ brokers, topic, clientId = 'bluebird-producer', compression = 'gzip', username, password, saslMechanism = 'plain', batchSize = DEFAULT_BATCH_SIZE_BYTES }) {
     super()
     this.topic = topic
-    this.maxBatchSizeBytes = maxBatchSizeBytes
+    this.batchSize = batchSize
     
     const sasl = username && password ? {
       mechanism: saslMechanism.toLowerCase(),
@@ -46,7 +46,7 @@ export class KafkaProcessor extends BatchProcessor {
     // - Offset
     // - Other metadata
     const overhead = 100 // Conservative estimate for message overhead
-    return Buffer.byteLength(event, 'utf8') + overhead
+    return Buffer.byteLength(JSON.stringify(event), 'utf8') + overhead
   }
 
   // Split events into batches that respect the size limit
@@ -57,7 +57,7 @@ export class KafkaProcessor extends BatchProcessor {
     
     // Account for batch-level overhead
     const batchOverhead = 100 // Conservative estimate for batch overhead
-    const effectiveBatchSize = this.maxBatchSizeBytes - batchOverhead
+    const effectiveBatchSize = this.batchSize - batchOverhead
 
     for (const event of events) {
       // Calculate size of this event including message overhead
@@ -65,7 +65,7 @@ export class KafkaProcessor extends BatchProcessor {
 
       // If this single event is larger than max batch size, we need to handle it specially
       if (eventSize > effectiveBatchSize) {
-        console.warn(`Warning: Event size ${eventSize} bytes exceeds max batch size ${this.maxBatchSizeBytes} bytes`)
+        console.warn(`Warning: Event size ${eventSize} bytes exceeds max batch size ${this.batchSize} bytes`)
         if (currentBatch.length > 0) {
           batches.push(currentBatch)
           currentBatch = []
@@ -104,7 +104,7 @@ export class KafkaProcessor extends BatchProcessor {
       
       for (const batch of batches) {
         const messages = batch.map(event => ({
-          value: event,
+          value: JSON.stringify(event),
           timestamp: Date.now(),
         }))
 
