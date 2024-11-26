@@ -1,112 +1,43 @@
 import { Command, Flags } from '@oclif/core'
 import { Jetstream } from '@skyware/jetstream'
-
-class BatchProcessor {
-  constructor(token, endpoint, datasource) {
-    this.token = token
-    this.endpoint = endpoint
-    this.datasource = datasource
-    this.queue = []
-    this.processing = false
-    this.maxRetries = 5
-    this.baseDelay = 1000 // 1 second
-    
-    // Rate limiting configuration
-    this.maxRequestsPerSecond = 5
-    this.tokens = this.maxRequestsPerSecond
-    this.lastRefill = Date.now()
-    this.refillInterval = 1000 // 1 second in milliseconds
-  }
-
-  async addBatch(events) {
-    this.queue.push([...events])
-    if (!this.processing) {
-      this.processing = true
-      this.processQueue().catch(console.error)
-    }
-  }
-
-  async waitForToken() {
-    const now = Date.now()
-    const timeSinceLastRefill = now - this.lastRefill
-    
-    // Refill tokens based on time elapsed
-    if (timeSinceLastRefill >= this.refillInterval) {
-      this.tokens = this.maxRequestsPerSecond
-      this.lastRefill = now
-    }
-
-    // If no tokens available, wait until next refill
-    if (this.tokens <= 0) {
-      const waitTime = this.refillInterval - timeSinceLastRefill
-      await new Promise(resolve => setTimeout(resolve, waitTime))
-      return this.waitForToken()
-    }
-
-    this.tokens--
-    return true
-  }
-
-  async processQueue() {
-    while (this.queue.length > 0) {
-      const batch = this.queue[0]
-      let success = false
-      let retryCount = 0
-
-      while (!success && retryCount < this.maxRetries) {
-        try {
-          await this.waitForToken() // Wait for rate limit token
-          await this.sendBatch(batch)
-          success = true
-          this.queue.shift() // Remove the processed batch
-        } catch (error) {
-          retryCount++
-          if (retryCount === this.maxRetries) {
-            console.error(`Failed to send batch after ${this.maxRetries} retries:`, error)
-            this.queue.shift() // Remove the failed batch after max retries
-          } else {
-            const delay = this.baseDelay * Math.pow(2, retryCount - 1)
-            console.log(`Retry ${retryCount} after ${delay}ms`)
-            await new Promise(resolve => setTimeout(resolve, delay))
-          }
-        }
-      }
-    }
-    this.processing = false
-  }
-
-  async sendBatch(events) {
-    const jsonl = events.join('\n')
-    const tinybird_url = `${this.endpoint}/v0/events?name=${this.datasource}`
-    const response = await fetch(tinybird_url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: jsonl,
-    })
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    console.log(`Successfully sent ${events.length} events to Tinybird`)
-    return await response.json()
-  }
-}
+import { TinybirdProcessor } from '../../utils/tinybird-processor.js'
+import { KafkaProcessor } from '../../utils/kafka-processor.js'
 
 export default class Start extends Command {
   static description = 'Start the bluebird feed'
 
   static examples = [
-    `<%= config.bin %> <%= command.id %> --token e.XXX --endpoint https://api.tinybird.co --datasource bluebird_feed (./src/commands/start/index.ts)
-`,
+    `<%= config.bin %> <%= command.id %> --tinybird-token e.XXX --tinybird-endpoint https://api.tinybird.co --tinybird-datasource bluebird_feed`,
+    `<%= config.bin %> <%= command.id %> --kafka-brokers localhost:9092 --kafka-topic bluebird`,
+    `<%= config.bin %> <%= command.id %> --kafka-brokers broker:9092 --kafka-topic bluebird --kafka-username user --kafka-password pass --kafka-sasl-mechanism scram-sha-512`,
+    `<%= config.bin %> <%= command.id %> --kafka-brokers broker:9092 --kafka-topic bluebird --kafka-batch-size 2097152`,
   ]
 
   static flags = {
-    token: Flags.string({ description: 'Tinybird token', required: true, char: 't' }),
-    endpoint: Flags.string({ description: 'Tinybird endpoint', required: true, char: 'e' }),
-    datasource: Flags.string({ description: 'Tinybird datasource', required: true, char: 'd' }),
+    // Tinybird flags
+    'tinybird-token': Flags.string({ description: 'Tinybird token', required: false, char: 't' }),
+    'tinybird-endpoint': Flags.string({ description: 'Tinybird endpoint', required: false, char: 'e' }),
+    'tinybird-datasource': Flags.string({ description: 'Tinybird datasource', required: false, char: 'd' }),
+    
+    // Kafka flags
+    'kafka-brokers': Flags.string({ description: 'Kafka brokers (comma-separated)', required: false }),
+    'kafka-topic': Flags.string({ description: 'Kafka topic', required: false }),
+    'kafka-client-id': Flags.string({ description: 'Kafka client ID', required: false, default: 'bluebird-producer' }),
+    'kafka-username': Flags.string({ description: 'Kafka SASL username', required: false }),
+    'kafka-password': Flags.string({ description: 'Kafka SASL password', required: false }),
+    'kafka-sasl-mechanism': Flags.string({
+      description: 'Kafka SASL mechanism',
+      required: false,
+      default: 'plain',
+      options: ['plain', 'scram-sha-256', 'scram-sha-512']
+    }),
+    'kafka-batch-size': Flags.integer({
+      description: 'Maximum batch size in bytes (default: 900KB)',
+      required: false,
+      default: 900 * 1024
+    }),
+    
+    // Common flags
     cursor: Flags.string({ description: 'Cursor (Unix microseconds)', required: false, char: 'c' }),
   }
 
@@ -115,10 +46,28 @@ export default class Start extends Command {
 
     this.log(`running start command with flags: ${JSON.stringify(flags)}`)
 
+    // Initialize the appropriate processor
+    let batchProcessor
+    if (flags['tinybird-token'] && flags['tinybird-endpoint'] && flags['tinybird-datasource']) {
+      batchProcessor = new TinybirdProcessor(flags['tinybird-token'], flags['tinybird-endpoint'], flags['tinybird-datasource'])
+    } else if (flags['kafka-brokers'] && flags['kafka-topic']) {
+      batchProcessor = new KafkaProcessor({
+        brokers: flags['kafka-brokers'].split(','),
+        topic: flags['kafka-topic'],
+        clientId: flags['kafka-client-id'],
+        username: flags['kafka-username'],
+        password: flags['kafka-password'],
+        saslMechanism: flags['kafka-sasl-mechanism'],
+        maxBatchSizeBytes: flags['kafka-batch-size']
+      })
+    } else {
+      this.error('Must provide either Tinybird credentials or Kafka configuration')
+      return
+    }
+
     let events = []
     let cursor = flags.cursor ? flags.cursor : Date.now() * 1000
-    const batchSize = 100
-    const batchProcessor = new BatchProcessor(flags.token, flags.endpoint, flags.datasource)
+    const batchSize = 5000
 
     const captureEvent = (collection, event) => {
       events.push(JSON.stringify({

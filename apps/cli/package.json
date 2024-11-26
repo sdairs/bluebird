@@ -12,6 +12,7 @@
     "@oclif/plugin-help": "^6",
     "@oclif/plugin-plugins": "^5",
     "@skyware/jetstream": "^0.2.0",
+    "kafkajs": "^2.2.4",
     "ws": "^8.18.0"
   },
   "devDependencies": {
