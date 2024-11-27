@@ -1,4 +1,4 @@
-name: publish
+name: CLI - Publish to NPM
 
 on:
   release:
@@ -7,14 +7,26 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
       - uses: actions/setup-node@v4
         with:
           node-version: latest
-      - run: pnpm install
-      - uses: JS-DevTools/npm-publish@19c28f1ef146469e409470805ea4279d47c3d35c
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: |
+          cd apps/cli
+          pnpm install
+      - name: Publish CLI package
+        run: |
+          cd apps/cli
+          pnpm publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
