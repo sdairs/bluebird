@@ -1,12 +1,12 @@
 {
   "name": "bluebird-cli",
-  "description": "send bluesky firehose to tinybird",
+  "description": "A CLI to consume the BlueSky firehose and push event to downstream data systems",
   "version": "0.1.0",
-  "author": "al",
+  "author": "sdairs",
   "bin": {
     "bluebird": "./bin/run.js"
   },
-  "bugs": "https://github.com/bsky_to_tinybird/bluebird/issues",
+  "bugs": "https://github.com/sdairs/bluebird/issues",
   "dependencies": {
     "@clickhouse/client": "^1.8.1",
     "@oclif/core": "^4",
@@ -41,7 +41,7 @@
     "/dist",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/bsky_to_tinybird/bluebird",
+  "homepage": "https://github.com/sdairs/bluebird",
   "keywords": [
     "oclif"
   ],
@@ -63,7 +63,7 @@
       }
     }
   },
-  "repository": "bsky_to_tinybird/bluebird",
+  "repository": "sdairs/bluebird",
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint . --ext .ts",
