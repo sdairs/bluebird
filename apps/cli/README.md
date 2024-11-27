@@ -1,7 +1,7 @@
-bluebird
+Bluebird CLI
 =================
 
-send bluesky firehose to tinybird
+Pushes the BlueSky Firehose to varying data services
 
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
@@ -29,17 +29,20 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`bluebird help [COMMAND]`](#bluebird-help-command)
-* [`bluebird plugins`](#bluebird-plugins)
-* [`bluebird plugins add PLUGIN`](#bluebird-plugins-add-plugin)
-* [`bluebird plugins:inspect PLUGIN...`](#bluebird-pluginsinspect-plugin)
-* [`bluebird plugins install PLUGIN`](#bluebird-plugins-install-plugin)
-* [`bluebird plugins link PATH`](#bluebird-plugins-link-path)
-* [`bluebird plugins remove [PLUGIN]`](#bluebird-plugins-remove-plugin)
-* [`bluebird plugins reset`](#bluebird-plugins-reset)
-* [`bluebird plugins uninstall [PLUGIN]`](#bluebird-plugins-uninstall-plugin)
-* [`bluebird plugins unlink [PLUGIN]`](#bluebird-plugins-unlink-plugin)
-* [`bluebird plugins update`](#bluebird-plugins-update)
+- [Bluebird CLI](#bluebird-cli)
+- [Usage](#usage)
+- [Commands](#commands)
+  - [`bluebird help [COMMAND]`](#bluebird-help-command)
+  - [`bluebird plugins`](#bluebird-plugins)
+  - [`bluebird plugins add PLUGIN`](#bluebird-plugins-add-plugin)
+  - [`bluebird plugins:inspect PLUGIN...`](#bluebird-pluginsinspect-plugin)
+  - [`bluebird plugins install PLUGIN`](#bluebird-plugins-install-plugin)
+  - [`bluebird plugins link PATH`](#bluebird-plugins-link-path)
+  - [`bluebird plugins remove [PLUGIN]`](#bluebird-plugins-remove-plugin)
+  - [`bluebird plugins reset`](#bluebird-plugins-reset)
+  - [`bluebird plugins uninstall [PLUGIN]`](#bluebird-plugins-uninstall-plugin)
+  - [`bluebird plugins unlink [PLUGIN]`](#bluebird-plugins-unlink-plugin)
+  - [`bluebird plugins update`](#bluebird-plugins-update)
 
 ## `bluebird help [COMMAND]`
 
