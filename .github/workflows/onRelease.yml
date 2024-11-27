@@ -1,6 +1,13 @@
 name: CLI - Publish to NPM
 
 on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Dry run (will not actually publish)'
+        type: boolean
+        required: false
+        default: false
   release:
     types: [released]
 
@@ -27,6 +34,11 @@ jobs:
       - name: Publish CLI package
         run: |
           cd apps/cli
-          pnpm publish --no-git-checks
+          if [ "${{ inputs.dry-run }}" = "true" ]; then
+            echo "Dry run mode - would publish package"
+            pnpm publish --dry-run --no-git-checks
+          else
+            pnpm publish --no-git-checks
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

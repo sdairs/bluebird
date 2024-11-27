@@ -2,6 +2,12 @@
 name: CLI - Version, Tag and Release
 
 on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (leave empty to use package.json version)'
+        required: false
+        type: string
   push:
     branches: [main]
     paths:
@@ -25,7 +31,11 @@ jobs:
         id: version-check
         run: |
           cd apps/cli
-          package_version=$(node -p "require('./package.json').version")
+          if [ -n "${{ inputs.version }}" ]; then
+            package_version="${{ inputs.version }}"
+          else
+            package_version=$(node -p "require('./package.json').version")
+          fi
           exists=$(gh api repos/${{ github.repository }}/releases/tags/v$package_version >/dev/null 2>&1 && echo "true" || echo "")
 
           if [ -n "$exists" ];
