@@ -40,6 +40,7 @@ jobs:
         if: ${{ steps.version-check.outputs.skipped == 'false' }}
         id: oclif-readme
         run: |
+          cd apps/cli
           pnpm install
           pnpm exec oclif readme
           if [ -n "$(git status --porcelain)" ]; then
