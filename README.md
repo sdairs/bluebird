@@ -6,6 +6,7 @@ Bluebird is a CLI that consumes the BlueSky firehose and sends it to a downstrea
 
 - Tinybird
 - Kafka
+- ClickHouse
 
 ## Usage
 
