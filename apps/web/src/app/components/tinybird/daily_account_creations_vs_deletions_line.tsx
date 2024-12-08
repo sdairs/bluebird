@@ -47,13 +47,13 @@ export function DailyAccountCreationsVsDeletionsLineChart({
   >([]);
 
   async function fetchData() {
-    let url = new URL(
+    const url = new URL(
       `${tinybird_base_url}v0/pipes/daily_account_creations_vs_deletions_api.json`
     );
 
     url.searchParams.set("since", since);
 
-    const result = await fetch(url, {
+    await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
