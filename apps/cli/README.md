@@ -16,11 +16,11 @@ Pushes the BlueSky Firehose to varying data services
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g bluebird-cli
+$ npm install -g @sdairs/bluebird
 $ bluebird COMMAND
 running command...
 $ bluebird (--version)
-bluebird-cli/0.1.0 linux-x64 node-v18.20.5
+@sdairs/bluebird/0.1.0 darwin-arm64 node-v22.12.0
 $ bluebird --help [COMMAND]
 USAGE
   $ bluebird COMMAND
@@ -29,20 +29,17 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-- [Bluebird CLI](#bluebird-cli)
-- [Usage](#usage)
-- [Commands](#commands)
-  - [`bluebird help [COMMAND]`](#bluebird-help-command)
-  - [`bluebird plugins`](#bluebird-plugins)
-  - [`bluebird plugins add PLUGIN`](#bluebird-plugins-add-plugin)
-  - [`bluebird plugins:inspect PLUGIN...`](#bluebird-pluginsinspect-plugin)
-  - [`bluebird plugins install PLUGIN`](#bluebird-plugins-install-plugin)
-  - [`bluebird plugins link PATH`](#bluebird-plugins-link-path)
-  - [`bluebird plugins remove [PLUGIN]`](#bluebird-plugins-remove-plugin)
-  - [`bluebird plugins reset`](#bluebird-plugins-reset)
-  - [`bluebird plugins uninstall [PLUGIN]`](#bluebird-plugins-uninstall-plugin)
-  - [`bluebird plugins unlink [PLUGIN]`](#bluebird-plugins-unlink-plugin)
-  - [`bluebird plugins update`](#bluebird-plugins-update)
+* [`bluebird help [COMMAND]`](#bluebird-help-command)
+* [`bluebird plugins`](#bluebird-plugins)
+* [`bluebird plugins:add PLUGIN`](#bluebird-pluginsadd-plugin)
+* [`bluebird plugins:inspect PLUGIN...`](#bluebird-pluginsinspect-plugin)
+* [`bluebird plugins:install PLUGIN`](#bluebird-pluginsinstall-plugin)
+* [`bluebird plugins:link PATH`](#bluebird-pluginslink-path)
+* [`bluebird plugins:remove [PLUGIN]`](#bluebird-pluginsremove-plugin)
+* [`bluebird plugins:reset`](#bluebird-pluginsreset)
+* [`bluebird plugins:uninstall [PLUGIN]`](#bluebird-pluginsuninstall-plugin)
+* [`bluebird plugins:unlink [PLUGIN]`](#bluebird-pluginsunlink-plugin)
+* [`bluebird plugins:update`](#bluebird-pluginsupdate)
 
 ## `bluebird help [COMMAND]`
 
@@ -87,13 +84,13 @@ EXAMPLES
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/index.ts)_
 
-## `bluebird plugins add PLUGIN`
+## `bluebird plugins:add PLUGIN`
 
 Installs a plugin into bluebird.
 
 ```
 USAGE
-  $ bluebird plugins add PLUGIN... [--json] [-f] [-h] [-s | -v]
+  $ bluebird plugins:add PLUGIN... [--json] [-f] [-h] [-s | -v]
 
 ARGUMENTS
   PLUGIN...  Plugin to install.
@@ -118,20 +115,20 @@ DESCRIPTION
   Use the BLUEBIRD_NPM_REGISTRY environment variable to set the npm registry.
 
 ALIASES
-  $ bluebird plugins add
+  $ bluebird plugins:add
 
 EXAMPLES
   Install a plugin from npm registry.
 
-    $ bluebird plugins add myplugin
+    $ bluebird plugins:add myplugin
 
   Install a plugin from a github url.
 
-    $ bluebird plugins add https://github.com/someuser/someplugin
+    $ bluebird plugins:add https://github.com/someuser/someplugin
 
   Install a plugin from a github slug.
 
-    $ bluebird plugins add someuser/someplugin
+    $ bluebird plugins:add someuser/someplugin
 ```
 
 ## `bluebird plugins:inspect PLUGIN...`
@@ -140,7 +137,7 @@ Displays installation properties of a plugin.
 
 ```
 USAGE
-  $ bluebird plugins inspect PLUGIN...
+  $ bluebird plugins:inspect PLUGIN...
 
 ARGUMENTS
   PLUGIN...  [default: .] Plugin to inspect.
@@ -156,18 +153,18 @@ DESCRIPTION
   Displays installation properties of a plugin.
 
 EXAMPLES
-  $ bluebird plugins inspect myplugin
+  $ bluebird plugins:inspect myplugin
 ```
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/inspect.ts)_
 
-## `bluebird plugins install PLUGIN`
+## `bluebird plugins:install PLUGIN`
 
 Installs a plugin into bluebird.
 
 ```
 USAGE
-  $ bluebird plugins install PLUGIN... [--json] [-f] [-h] [-s | -v]
+  $ bluebird plugins:install PLUGIN... [--json] [-f] [-h] [-s | -v]
 
 ARGUMENTS
   PLUGIN...  Plugin to install.
@@ -192,31 +189,31 @@ DESCRIPTION
   Use the BLUEBIRD_NPM_REGISTRY environment variable to set the npm registry.
 
 ALIASES
-  $ bluebird plugins add
+  $ bluebird plugins:add
 
 EXAMPLES
   Install a plugin from npm registry.
 
-    $ bluebird plugins install myplugin
+    $ bluebird plugins:install myplugin
 
   Install a plugin from a github url.
 
-    $ bluebird plugins install https://github.com/someuser/someplugin
+    $ bluebird plugins:install https://github.com/someuser/someplugin
 
   Install a plugin from a github slug.
 
-    $ bluebird plugins install someuser/someplugin
+    $ bluebird plugins:install someuser/someplugin
 ```
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/install.ts)_
 
-## `bluebird plugins link PATH`
+## `bluebird plugins:link PATH`
 
 Links a plugin into the CLI for development.
 
 ```
 USAGE
-  $ bluebird plugins link PATH [-h] [--install] [-v]
+  $ bluebird plugins:link PATH [-h] [--install] [-v]
 
 ARGUMENTS
   PATH  [default: .] path to plugin
@@ -236,18 +233,18 @@ DESCRIPTION
 
 
 EXAMPLES
-  $ bluebird plugins link myplugin
+  $ bluebird plugins:link myplugin
 ```
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/link.ts)_
 
-## `bluebird plugins remove [PLUGIN]`
+## `bluebird plugins:remove [PLUGIN]`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ bluebird plugins remove [PLUGIN...] [-h] [-v]
+  $ bluebird plugins:remove [PLUGIN...] [-h] [-v]
 
 ARGUMENTS
   PLUGIN...  plugin to uninstall
@@ -260,20 +257,20 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ bluebird plugins unlink
-  $ bluebird plugins remove
+  $ bluebird plugins:unlink
+  $ bluebird plugins:remove
 
 EXAMPLES
-  $ bluebird plugins remove myplugin
+  $ bluebird plugins:remove myplugin
 ```
 
-## `bluebird plugins reset`
+## `bluebird plugins:reset`
 
 Remove all user-installed and linked plugins.
 
 ```
 USAGE
-  $ bluebird plugins reset [--hard] [--reinstall]
+  $ bluebird plugins:reset [--hard] [--reinstall]
 
 FLAGS
   --hard       Delete node_modules and package manager related files in addition to uninstalling plugins.
@@ -282,13 +279,13 @@ FLAGS
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/reset.ts)_
 
-## `bluebird plugins uninstall [PLUGIN]`
+## `bluebird plugins:uninstall [PLUGIN]`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ bluebird plugins uninstall [PLUGIN...] [-h] [-v]
+  $ bluebird plugins:uninstall [PLUGIN...] [-h] [-v]
 
 ARGUMENTS
   PLUGIN...  plugin to uninstall
@@ -301,22 +298,22 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ bluebird plugins unlink
-  $ bluebird plugins remove
+  $ bluebird plugins:unlink
+  $ bluebird plugins:remove
 
 EXAMPLES
-  $ bluebird plugins uninstall myplugin
+  $ bluebird plugins:uninstall myplugin
 ```
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/uninstall.ts)_
 
-## `bluebird plugins unlink [PLUGIN]`
+## `bluebird plugins:unlink [PLUGIN]`
 
 Removes a plugin from the CLI.
 
 ```
 USAGE
-  $ bluebird plugins unlink [PLUGIN...] [-h] [-v]
+  $ bluebird plugins:unlink [PLUGIN...] [-h] [-v]
 
 ARGUMENTS
   PLUGIN...  plugin to uninstall
@@ -329,20 +326,20 @@ DESCRIPTION
   Removes a plugin from the CLI.
 
 ALIASES
-  $ bluebird plugins unlink
-  $ bluebird plugins remove
+  $ bluebird plugins:unlink
+  $ bluebird plugins:remove
 
 EXAMPLES
-  $ bluebird plugins unlink myplugin
+  $ bluebird plugins:unlink myplugin
 ```
 
-## `bluebird plugins update`
+## `bluebird plugins:update`
 
 Update installed plugins.
 
 ```
 USAGE
-  $ bluebird plugins update [-h] [-v]
+  $ bluebird plugins:update [-h] [-v]
 
 FLAGS
   -h, --help     Show CLI help.
