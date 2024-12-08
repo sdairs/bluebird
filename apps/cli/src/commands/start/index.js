@@ -3,6 +3,7 @@ import { Jetstream } from '@skyware/jetstream'
 import { TinybirdDestination } from '../../destinations/tinybird/tinybird.js'
 import { KafkaDestination } from '../../destinations/kafka/kafka.js'
 import { ClickHouseDestination } from '../../destinations/clickhouse/clickhouse.js'
+import { TimeplusDestination } from '../../destinations/timeplus/timeplus.js'
 
 export default class Start extends Command {
   static description = 'Start the bluebird feed'
@@ -13,13 +14,14 @@ export default class Start extends Command {
     `<%= config.bin %> <%= command.id %> kafka --brokers broker:9092 --topic bluebird --username user --password pass --sasl-mechanism scram-sha-512`,
     `<%= config.bin %> <%= command.id %> kafka --brokers broker:9092 --topic bluebird --batch-size 2097152`,
     `<%= config.bin %> <%= command.id %> clickhouse --url http://localhost:8123 --database default --table bluebird`,
+    `<%= config.bin %> <%= command.id %> timeplus --token XXX --endpoint https://us-west-2.timeplus.cloud/myworkspace --stream bluebird_feed`,
   ]
 
   static args = {
     destination: Args.string({
       description: 'Destination to send data to',
       required: true,
-      options: ['tinybird', 'kafka', 'clickhouse']
+      options: ['tinybird', 'kafka', 'clickhouse','timeplus']
     })
   }
 
@@ -99,7 +101,13 @@ export default class Start extends Command {
     table: Flags.string({
       description: 'ClickHouse table name',
       required: false,
-    })
+    }),
+
+    // Timeplus flags
+    stream: Flags.string({
+      description: 'Timeplus stream',
+      required: false,
+    }),
   }
 
   async run() {
@@ -147,6 +155,17 @@ export default class Start extends Command {
           password: flags.password,
           tableName: flags.table
         })
+        break
+
+      case 'timeplus':
+        if (!flags.token || !flags.endpoint || !flags.stream) {
+          this.error('Timeplus destination requires token, endpoint, and stream')
+        }
+        destination = new TimeplusDestination(
+          flags.token,
+          flags.endpoint,
+          flags.stream
+        )
         break
 
       default:
