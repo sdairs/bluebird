@@ -2,11 +2,7 @@
 
 import { Metric } from "@/app/components/metric";
 import { useState, useEffect } from "react";
-import {
-  AvgPostsResponse,
-  PostsByDIDResponse,
-  TinybirdResponse,
-} from "@/lib/types";
+import { AvgPostsResponse, TinybirdResponse } from "@/lib/types";
 import * as v from "valibot";
 
 const token = process.env.NEXT_PUBLIC_TINYBIRD_TOKEN;
@@ -19,9 +15,9 @@ export function AvgPostsMetric() {
   });
 
   async function fetchPostsTotal() {
-    let url = new URL(`${tinybird_base_url}v0/pipes/avg_posts_api.json`);
+    const url = new URL(`${tinybird_base_url}v0/pipes/avg_posts_api.json`);
 
-    const result = await fetch(url, {
+    await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
