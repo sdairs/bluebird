@@ -29,20 +29,17 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-- [Bluebird CLI](#bluebird-cli)
-- [Usage](#usage)
-- [Commands](#commands)
-  - [`bluebird help [COMMAND]`](#bluebird-help-command)
-  - [`bluebird plugins`](#bluebird-plugins)
-  - [`bluebird plugins add PLUGIN`](#bluebird-plugins-add-plugin)
-  - [`bluebird plugins:inspect PLUGIN...`](#bluebird-pluginsinspect-plugin)
-  - [`bluebird plugins install PLUGIN`](#bluebird-plugins-install-plugin)
-  - [`bluebird plugins link PATH`](#bluebird-plugins-link-path)
-  - [`bluebird plugins remove [PLUGIN]`](#bluebird-plugins-remove-plugin)
-  - [`bluebird plugins reset`](#bluebird-plugins-reset)
-  - [`bluebird plugins uninstall [PLUGIN]`](#bluebird-plugins-uninstall-plugin)
-  - [`bluebird plugins unlink [PLUGIN]`](#bluebird-plugins-unlink-plugin)
-  - [`bluebird plugins update`](#bluebird-plugins-update)
+* [`bluebird help [COMMAND]`](#bluebird-help-command)
+* [`bluebird plugins`](#bluebird-plugins)
+* [`bluebird plugins add PLUGIN`](#bluebird-plugins-add-plugin)
+* [`bluebird plugins:inspect PLUGIN...`](#bluebird-pluginsinspect-plugin)
+* [`bluebird plugins install PLUGIN`](#bluebird-plugins-install-plugin)
+* [`bluebird plugins link PATH`](#bluebird-plugins-link-path)
+* [`bluebird plugins remove [PLUGIN]`](#bluebird-plugins-remove-plugin)
+* [`bluebird plugins reset`](#bluebird-plugins-reset)
+* [`bluebird plugins uninstall [PLUGIN]`](#bluebird-plugins-uninstall-plugin)
+* [`bluebird plugins unlink [PLUGIN]`](#bluebird-plugins-unlink-plugin)
+* [`bluebird plugins update`](#bluebird-plugins-update)
 
 ## `bluebird help [COMMAND]`
 
