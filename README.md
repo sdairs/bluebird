@@ -78,14 +78,16 @@ pnpm build
 From within the `cli` directory:
 
 ```
-/bin/dev.js start [OPTS]
+./bin/dev.js start [OPTS]
 ```
 
 For example:
 
 ```
-/bin/dev.js start tinybird --token e.XXX --endpoint https://api.tinybird.co --datasource bluebird_feed
+./bin/dev.js start tinybird --token e.XXX --endpoint https://api.tinybird.co --datasource bluebird_feed
 ```
+
+Note: you need to do this inside the `cli` dir if you don't have `ts-node` installed globally. If you see a module not found error for `ts-node`, this is why.
 
 ## Contributing
 
