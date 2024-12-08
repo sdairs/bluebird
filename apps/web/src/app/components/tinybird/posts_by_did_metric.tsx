@@ -20,13 +20,13 @@ export function PostsByDIDMetric({ did }: PostsByDIDParams) {
   });
 
   async function fetchPostsTotal() {
-    let url = new URL(
+    const url = new URL(
       `${tinybird_base_url}v0/pipes/post_count_by_did_api.json`
     );
 
     url.searchParams.append("did", did);
 
-    const result = await fetch(url, {
+    await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
