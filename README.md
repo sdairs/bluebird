@@ -64,6 +64,15 @@ export class TinybirdDestination extends Destination {
 }
 ```
 
+### Adding the destination to the CLI start command
+
+Add the new destination to the `start` command in `src/commands/start/index.js`.
+
+1. Add example usage in the examples array
+2. Add your destination to the `args` object
+3. Add any flags to the `flags` object
+4. Add your destination to the destination switch in `run()`
+
 ### Building the CLI for dev
 
 Install deps and build the CLI:
@@ -88,15 +97,6 @@ For example:
 ```
 
 Note: you need to do this inside the `cli` dir if you don't have `ts-node` installed globally. If you see a module not found error for `ts-node`, this is why.
-
-### Adding the destination to the CLI start command
-
-Add the new destination to the `start` command in `src/commands/start/index.js`.
-
-1. Add example usage in the examples array
-2. Add your destination to the `args` object
-3. Add any flags to the `flags` object
-4. Add your destination to the destination switch in `run()`
 
 ## Contributing
 
