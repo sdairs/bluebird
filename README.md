@@ -7,6 +7,7 @@ Bluebird is a CLI that consumes the BlueSky firehose and sends it to a downstrea
 - Tinybird
 - Kafka
 - ClickHouse
+- Timeplus
 
 ## Usage
 
@@ -30,6 +31,12 @@ For ClickHouse:
 
 ```
 npx @sdairs/bluebird start clickhouse --url http://localhost:8123 --database default --table bluebird
+```
+
+For Timeplus:
+You can create a free account at https://us-west-2.timeplus.cloud, then follow the guide to create the API token: https://docs.timeplus.com/apikey. The `stream` will be created automatically if not exists. This also works with self-hosting Timeplus Enterprise, please set the token as `username:password`.
+```
+npx @sdairs/bluebird start timeplus --token XXX --endpoint https://us-west-2.timeplus.cloud/ws_id --stream bluebird
 ```
 
 ## CLI development
