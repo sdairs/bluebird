@@ -15,26 +15,28 @@ You can use `npx` (or `pnpm dlx`) to run the CLI without installing it.
 
 Or use `npm install -g @sdairs/bluebird` to install it globally.
 
-For Tinybird:
+### Tinybird
 
 ```
 npx @sdairs/bluebird start tinybird --token e.XXX --endpoint https://api.tinybird.co --datasource bluebird_feed
 ```
 
-For Kafka:
+### Kafka
 
 ```
 npx @sdairs/bluebird start kafka --brokers broker:9092 --topic bluebird --username user --password pass --sasl-mechanism scram-sha-512 --batch-size 819200
 ```
 
-For ClickHouse:
+### ClickHouse
 
 ```
 npx @sdairs/bluebird start clickhouse --url http://localhost:8123 --database default --table bluebird
 ```
 
-For Timeplus:
+### Timeplus
+
 You can create a free account at https://us-west-2.timeplus.cloud, then follow the guide to create the API token: https://docs.timeplus.com/apikey. The `stream` will be created automatically if not exists. This also works with self-hosting Timeplus Enterprise, please set the token as `username:password`.
+
 ```
 npx @sdairs/bluebird start timeplus --token XXX --endpoint https://us-west-2.timeplus.cloud/ws_id --stream bluebird
 ```
