@@ -20,7 +20,7 @@ $ npm install -g @sdairs/bluebird
 $ bluebird COMMAND
 running command...
 $ bluebird (--version)
-@sdairs/bluebird/0.2.0 linux-x64 node-v18.20.5
+@sdairs/bluebird/0.2.0 darwin-arm64 node-v22.11.0
 $ bluebird --help [COMMAND]
 USAGE
   $ bluebird COMMAND
