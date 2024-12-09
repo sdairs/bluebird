@@ -1,7 +1,7 @@
 {
   "name": "@sdairs/bluebird",
   "description": "A CLI to consume the BlueSky firehose and push event to downstream data systems",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "sdairs",
   "bin": {
     "bluebird": "./bin/run.js"
