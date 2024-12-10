@@ -1,19 +1,11 @@
 import { Destination } from '../base.js';
-import { createClient, ClickHouseClient, ClickHouseSettings, CommandResult } from '@clickhouse/client';
+import { createClient, ClickHouseClient, ClickHouseSettings } from '@clickhouse/client';
 
 interface ClickHouseConfig {
   url: string;
   database: string;
   username: string;
   password: string;
-}
-
-interface ClickHouseDestinationConfig {
-  url?: string;
-  database?: string;
-  username?: string;
-  password?: string;
-  tableName: string;
 }
 
 const TABLE_DEFINITION = `
@@ -32,20 +24,9 @@ export class ClickHouseDestination extends Destination {
   private insertPromises: Promise<any>[];
   private monitorInterval?: NodeJS.Timeout;
 
-  constructor({
-    url = 'http://localhost:8123',
-    database = 'default',
-    username = 'default',
-    password = '',
-    tableName,
-  }: ClickHouseDestinationConfig) {
+  constructor(config: ClickHouseConfig, tableName: string) {
     super();
-    this.config = {
-      url,
-      database,
-      username,
-      password,
-    };
+    this.config = config;
     this.tableName = tableName;
     this.client = null;
     this.insertPromises = [];
@@ -62,7 +43,7 @@ export class ClickHouseDestination extends Destination {
       };
 
       this.client = createClient({
-        url: this.config.url,
+        host: this.config.url,
         database: this.config.database,
         username: this.config.username,
         password: this.config.password,
