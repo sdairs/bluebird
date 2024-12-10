@@ -11,9 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-      - run: cd apps/cli
       - name: Check if version already exists
         id: version-check
+        working-directory: apps/cli
         run: |
           package_version=$(node -p "require('./package.json').version")
           exists=$(gh api repos/${{ github.repository }}/releases/tags/v$package_version >/dev/null 2>&1 && echo "true" || echo "")
@@ -38,6 +38,7 @@ jobs:
       - name: Generate oclif README
         if: ${{ steps.version-check.outputs.skipped == 'false' }}
         id: oclif-readme
+        working-directory: apps/cli
         run: |
           pnpm install
           pnpm exec oclif readme

@@ -13,8 +13,8 @@ jobs:
         with:
           node-version: latest
       - run: pnpm install
-      - run: cd apps/cli
       - uses: JS-DevTools/npm-publish@19c28f1ef146469e409470805ea4279d47c3d35c
         with:
+          package: apps/cli
           token: ${{ secrets.NPM_TOKEN }}
           access: public
