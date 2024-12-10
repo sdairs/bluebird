@@ -9,11 +9,11 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsc && shx cp bin/run.js bin/run",
+    "build": "pnpm run clean && tsc && shx cp bin/run.js bin/run",
     "clean": "shx rm -rf dist",
     "lint": "eslint . --ext .ts",
     "postpack": "shx rm -f oclif.manifest.json",
-    "prepack": "npm run build && oclif manifest && shx cp bin/run.js bin/run",
+    "prepack": "pnpm run build && oclif manifest && shx cp bin/run.js bin/run",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },
