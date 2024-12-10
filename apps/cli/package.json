@@ -1,6 +1,6 @@
 {
   "name": "@sdairs/bluebird",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Bluebird CLI for streaming data to various data services",
   "type": "module",
   "exports": "./dist/index.js",
