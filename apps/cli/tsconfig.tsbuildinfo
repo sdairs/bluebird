@@ -1,1 +1,1 @@
-{"root":["./src/index.ts"],"version":"5.6.3"}
+{"root":["./src/index.ts","./src/commands/start.ts","./src/commands/start/base.ts","./src/commands/start/clickhouse.ts","./src/commands/start/kafka.ts","./src/commands/start/timeplus.ts","./src/commands/start/tinybird.ts","./src/destinations/base.ts","./src/destinations/clickhouse/clickhouse.ts","./src/destinations/tinybird/tinybird.ts","./src/lib/jetstream.ts","./src/lib/types.ts"],"version":"5.6.3"}
