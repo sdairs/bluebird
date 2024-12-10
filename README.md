@@ -1,6 +1,6 @@
 # Bluebird
 
-Bluebird is a CLI that consumes the BlueSky firehose and sends it to a downstream destination.
+Bluebird is a CLI that consumes the Bluesky firehose and sends it to a downstream destination.
 
 ## Destinations
 
