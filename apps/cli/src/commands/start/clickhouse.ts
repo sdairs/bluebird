@@ -39,7 +39,6 @@ export default class StartClickhouse extends BaseStartCommand<typeof StartClickh
       database: flags.database,
       username: flags.username,
       password: flags.password,
-      tableName: flags.table,
-    });
+    }, flags.table);
   }
 }
