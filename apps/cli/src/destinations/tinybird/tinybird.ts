@@ -1,20 +1,26 @@
-import { Destination } from '../destination.js'
+import { Destination } from '../base.js';
+
+interface TinybirdConfig {
+  token: string;
+  endpoint: string;
+  datasource: string;
+}
 
 export class TinybirdDestination extends Destination {
-  constructor(token, endpoint, datasource) {
-    super()
-    this.token = token
-    this.endpoint = endpoint
-    this.datasource = datasource
+  private config: TinybirdConfig;
+
+  constructor(config: TinybirdConfig) {
+    super();
+    this.config = config;
   }
 
-  async processBatch(events) {
+  async send(events: any[]): Promise<void> {
     const jsonl = events.map(event => JSON.stringify(event)).join('\n')
-    const tinybird_url = `${this.endpoint}/v0/events?name=${this.datasource}`
+    const tinybird_url = `${this.config.endpoint}/v0/events?name=${this.config.datasource}`
     const response = await fetch(tinybird_url, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.config.token}`,
         'Content-Type': 'application/json',
       },
       body: jsonl,

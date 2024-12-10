@@ -1,66 +1,50 @@
 {
   "name": "@sdairs/bluebird",
-  "description": "A CLI to consume the BlueSky firehose and push event to downstream data systems",
-  "version": "0.2.0",
-  "author": "sdairs",
-  "bin": {
-    "bluebird": "./bin/run.js"
+  "version": "1.0.0",
+  "description": "Bluebird CLI for streaming data to various data services",
+  "type": "module",
+  "exports": "./dist/index.js",
+  "engines": {
+    "node": ">=18.0.0"
   },
-  "bugs": "https://github.com/sdairs/bluebird/issues",
+  "scripts": {
+    "build": "tsc",
+    "clean": "shx rm -rf dist",
+    "lint": "eslint . --ext .ts",
+    "postpack": "shx rm -f oclif.manifest.json",
+    "prepack": "npm run build && oclif manifest",
+    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif readme && git add README.md"
+  },
   "dependencies": {
-    "@clickhouse/client": "^1.8.1",
-    "@oclif/core": "^4",
-    "@oclif/plugin-help": "^6",
-    "@oclif/plugin-plugins": "^5",
-    "@skyware/jetstream": "^0.2.0",
-    "kafkajs": "^2.2.4",
-    "ws": "^8.18.0"
+    "@clickhouse/client": "^0.2.7",
+    "@oclif/core": "^3.15.1",
+    "@skyware/jetstream": "^1.0.0",
+    "kafkajs": "^2.2.4"
   },
   "devDependencies": {
-    "@oclif/prettier-config": "^0.2.1",
-    "@oclif/test": "^4",
-    "@types/node": "^18",
-    "eslint": "^8",
-    "eslint-config-oclif": "^5",
-    "eslint-config-oclif-typescript": "^3",
-    "eslint-config-prettier": "^9",
-    "mocha": "^10",
-    "oclif": "^4",
-    "shx": "^0.3.3",
-    "ts-node": "^10",
-    "typescript": "^5"
+    "@types/node": "^20.10.5",
+    "eslint": "^8.56.0",
+    "mocha": "^10.2.0",
+    "oclif": "^4.1.0",
+    "shx": "^0.3.4",
+    "typescript": "^5.3.3"
   },
-  "engines": {
-    "node": ">=22.0.0"
+  "oclif": {
+    "bin": "bluebird",
+    "dirname": "bluebird",
+    "commands": "./dist/commands",
+    "plugins": [],
+    "topicSeparator": " ",
+    "topics": {
+      "start": {
+        "description": "Start the bluebird feed"
+      }
+    }
   },
   "files": [
     "/bin",
     "/dist",
     "/oclif.manifest.json"
-  ],
-  "homepage": "https://github.com/sdairs/bluebird",
-  "keywords": [
-    "oclif"
-  ],
-  "license": "MIT",
-  "main": "dist/index.js",
-  "type": "module",
-  "oclif": {
-    "bin": "bluebird",
-    "dirname": "bluebird",
-    "commands": "./dist/commands",
-    "plugins": [
-      "@oclif/plugin-help",
-      "@oclif/plugin-plugins"
-    ]
-  },
-  "repository": "sdairs/bluebird",
-  "scripts": {
-    "build": "shx rm -rf dist && tsc -b",
-    "lint": "eslint . --ext .ts",
-    "postpack": "shx rm -f oclif.manifest.json",
-    "prepack": "oclif manifest && oclif readme",
-    "version": "oclif readme && git add README.md"
-  },
-  "types": "dist/index.d.ts"
+  ]
 }

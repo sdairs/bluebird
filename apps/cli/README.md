@@ -1,12 +1,12 @@
-Bluebird CLI
+@sdairs/bluebird
 =================
 
-Pushes the BlueSky Firehose to varying data services
+Send the Bluesky firehose to various data services
 
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/bluebird.svg)](https://npmjs.org/package/bluebird)
-[![Downloads/week](https://img.shields.io/npm/dw/bluebird.svg)](https://npmjs.org/package/bluebird)
+[![Version](https://img.shields.io/npm/v/@sdairs/bluebird.svg)](https://npmjs.org/package/@sdairs/bluebird)
+[![Downloads/week](https://img.shields.io/npm/dw/@sdairs/bluebird.svg)](https://npmjs.org/package/@sdairs/bluebird)
 
 
 <!-- toc -->
@@ -20,7 +20,7 @@ $ npm install -g @sdairs/bluebird
 $ bluebird COMMAND
 running command...
 $ bluebird (--version)
-@sdairs/bluebird/0.2.0 darwin-arm64 node-v22.11.0
+@sdairs/bluebird/1.0.0 darwin-arm64 node-v22.11.0
 $ bluebird --help [COMMAND]
 USAGE
   $ bluebird COMMAND
@@ -29,325 +29,138 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`bluebird help [COMMAND]`](#bluebird-help-command)
-* [`bluebird plugins`](#bluebird-plugins)
-* [`bluebird plugins:add PLUGIN`](#bluebird-pluginsadd-plugin)
-* [`bluebird plugins:inspect PLUGIN...`](#bluebird-pluginsinspect-plugin)
-* [`bluebird plugins:install PLUGIN`](#bluebird-pluginsinstall-plugin)
-* [`bluebird plugins:link PATH`](#bluebird-pluginslink-path)
-* [`bluebird plugins:remove [PLUGIN]`](#bluebird-pluginsremove-plugin)
-* [`bluebird plugins:reset`](#bluebird-pluginsreset)
-* [`bluebird plugins:uninstall [PLUGIN]`](#bluebird-pluginsuninstall-plugin)
-* [`bluebird plugins:unlink [PLUGIN]`](#bluebird-pluginsunlink-plugin)
-* [`bluebird plugins:update`](#bluebird-pluginsupdate)
+* [`bluebird start`](#bluebird-start)
+* [`bluebird start base`](#bluebird-start-base)
+* [`bluebird start clickhouse`](#bluebird-start-clickhouse)
+* [`bluebird start kafka`](#bluebird-start-kafka)
+* [`bluebird start timeplus`](#bluebird-start-timeplus)
+* [`bluebird start tinybird`](#bluebird-start-tinybird)
 
-## `bluebird help [COMMAND]`
+## `bluebird start`
 
-Display help for bluebird.
+Start the bluebird feed
 
 ```
 USAGE
-  $ bluebird help [COMMAND...] [-n]
-
-ARGUMENTS
-  COMMAND...  Command to show help for.
-
-FLAGS
-  -n, --nested-commands  Include all nested commands in the output.
+  $ bluebird start
 
 DESCRIPTION
-  Display help for bluebird.
-```
-
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.17/src/commands/help.ts)_
-
-## `bluebird plugins`
-
-List installed plugins.
-
-```
-USAGE
-  $ bluebird plugins [--json] [--core]
-
-FLAGS
-  --core  Show core plugins.
-
-GLOBAL FLAGS
-  --json  Format output as json.
-
-DESCRIPTION
-  List installed plugins.
+  Start the bluebird feed
 
 EXAMPLES
-  $ bluebird plugins
+  $ bluebird start
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/index.ts)_
+## `bluebird start base`
 
-## `bluebird plugins:add PLUGIN`
-
-Installs a plugin into bluebird.
+Start the bluebird feed
 
 ```
 USAGE
-  $ bluebird plugins:add PLUGIN... [--json] [-f] [-h] [-s | -v]
-
-ARGUMENTS
-  PLUGIN...  Plugin to install.
+  $ bluebird start base [-c <value>]
 
 FLAGS
-  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
-  -h, --help     Show CLI help.
-  -s, --silent   Silences npm output.
-  -v, --verbose  Show verbose npm output.
-
-GLOBAL FLAGS
-  --json  Format output as json.
+  -c, --cursor=<value>  Cursor (Unix microseconds)
 
 DESCRIPTION
-  Installs a plugin into bluebird.
+  Start the bluebird feed
+```
 
-  Uses npm to install plugins.
+## `bluebird start clickhouse`
 
-  Installation of a user-installed plugin will override a core plugin.
+Start the bluebird feed with ClickHouse destination
 
-  Use the BLUEBIRD_NPM_LOG_LEVEL environment variable to set the npm loglevel.
-  Use the BLUEBIRD_NPM_REGISTRY environment variable to set the npm registry.
+```
+USAGE
+  $ bluebird start clickhouse --table <value> [-c <value>] [--url <value>] [--database <value>] [--username <value>]
+    [--password <value>]
 
-ALIASES
-  $ bluebird plugins:add
+FLAGS
+  -c, --cursor=<value>    Cursor (Unix microseconds)
+      --database=<value>  ClickHouse database name
+      --password=<value>  ClickHouse password
+      --table=<value>     (required) ClickHouse table name
+      --url=<value>       ClickHouse server URL
+      --username=<value>  ClickHouse username
+
+DESCRIPTION
+  Start the bluebird feed with ClickHouse destination
 
 EXAMPLES
-  Install a plugin from npm registry.
-
-    $ bluebird plugins:add myplugin
-
-  Install a plugin from a github url.
-
-    $ bluebird plugins:add https://github.com/someuser/someplugin
-
-  Install a plugin from a github slug.
-
-    $ bluebird plugins:add someuser/someplugin
+  $ bluebird start clickhouse --url http://localhost:8123 --database default --table bluebird
 ```
 
-## `bluebird plugins:inspect PLUGIN...`
+## `bluebird start kafka`
 
-Displays installation properties of a plugin.
+Send the Bluebird feed to Kafka
 
 ```
 USAGE
-  $ bluebird plugins:inspect PLUGIN...
-
-ARGUMENTS
-  PLUGIN...  [default: .] Plugin to inspect.
+  $ bluebird start kafka -b <value> -t <value> [-c <value>] [-c <value>] [-m plain|scram-sha-256|scram-sha-512
+    [-u <value> -p <value>] ] [-n <value>] [-s]
 
 FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-GLOBAL FLAGS
-  --json  Format output as json.
+  -b, --brokers=<value>          (required) Kafka brokers (comma-separated)
+  -c, --client-id=<value>        [default: bluebird-producer] Kafka client ID
+  -c, --cursor=<value>           Cursor (Unix microseconds)
+  -m, --sasl-mechanism=<option>  [default: plain] SASL mechanism
+                                 <options: plain|scram-sha-256|scram-sha-512>
+  -n, --batch-size=<value>       [default: 921600] Maximum batch size in bytes
+  -p, --password=<value>         SASL password
+  -s, --ssl                      Enable SSL
+  -t, --topic=<value>            (required) Kafka topic
+  -u, --username=<value>         SASL username
 
 DESCRIPTION
-  Displays installation properties of a plugin.
+  Send the Bluebird feed to Kafka
 
 EXAMPLES
-  $ bluebird plugins:inspect myplugin
+  $ bluebird start kafka --brokers localhost:9092 --topic bluebird
+
+  $ bluebird start kafka --brokers broker:9092 --topic bluebird --username user --password pass --sasl-mechanism scram-sha-512
+
+  $ bluebird start kafka --brokers broker:9092 --topic bluebird --batch-size 2097152
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/inspect.ts)_
+## `bluebird start timeplus`
 
-## `bluebird plugins:install PLUGIN`
-
-Installs a plugin into bluebird.
+Start the timeplus feed
 
 ```
 USAGE
-  $ bluebird plugins:install PLUGIN... [--json] [-f] [-h] [-s | -v]
-
-ARGUMENTS
-  PLUGIN...  Plugin to install.
+  $ bluebird start timeplus --stream <value> --token <value> --endpoint <value> [-c <value>]
 
 FLAGS
-  -f, --force    Force npm to fetch remote resources even if a local copy exists on disk.
-  -h, --help     Show CLI help.
-  -s, --silent   Silences npm output.
-  -v, --verbose  Show verbose npm output.
-
-GLOBAL FLAGS
-  --json  Format output as json.
+  -c, --cursor=<value>    Cursor (Unix microseconds)
+      --endpoint=<value>  (required) Timeplus endpoint
+      --stream=<value>    (required) Timeplus stream
+      --token=<value>     (required) Timeplus token
 
 DESCRIPTION
-  Installs a plugin into bluebird.
-
-  Uses npm to install plugins.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  Use the BLUEBIRD_NPM_LOG_LEVEL environment variable to set the npm loglevel.
-  Use the BLUEBIRD_NPM_REGISTRY environment variable to set the npm registry.
-
-ALIASES
-  $ bluebird plugins:add
+  Start the timeplus feed
 
 EXAMPLES
-  Install a plugin from npm registry.
-
-    $ bluebird plugins:install myplugin
-
-  Install a plugin from a github url.
-
-    $ bluebird plugins:install https://github.com/someuser/someplugin
-
-  Install a plugin from a github slug.
-
-    $ bluebird plugins:install someuser/someplugin
+  $ bluebird start timeplus timeplus --stream bluebird_feed --token XXX --endpoint https://us-west-2.timeplus.cloud/myworkspace
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/install.ts)_
+## `bluebird start tinybird`
 
-## `bluebird plugins:link PATH`
-
-Links a plugin into the CLI for development.
+Send the Bluebird feed to Tinybird
 
 ```
 USAGE
-  $ bluebird plugins:link PATH [-h] [--install] [-v]
-
-ARGUMENTS
-  PATH  [default: .] path to plugin
+  $ bluebird start tinybird -t <value> -e <value> -d <value> [-c <value>]
 
 FLAGS
-  -h, --help          Show CLI help.
-  -v, --verbose
-      --[no-]install  Install dependencies after linking the plugin.
+  -c, --cursor=<value>      Cursor (Unix microseconds)
+  -d, --datasource=<value>  (required) Tinybird Data Source
+  -e, --endpoint=<value>    (required) Tinybird API base URL
+  -t, --token=<value>       (required) Tinybird Token
 
 DESCRIPTION
-  Links a plugin into the CLI for development.
-
-  Installation of a linked plugin will override a user-installed or core plugin.
-
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
-  command will override the user-installed or core plugin implementation. This is useful for development work.
-
+  Send the Bluebird feed to Tinybird
 
 EXAMPLES
-  $ bluebird plugins:link myplugin
+  $ bluebird start tinybird --token e.XXX --endpoint https://api.tinybird.co --datasource bluebird_feed
 ```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/link.ts)_
-
-## `bluebird plugins:remove [PLUGIN]`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ bluebird plugins:remove [PLUGIN...] [-h] [-v]
-
-ARGUMENTS
-  PLUGIN...  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ bluebird plugins:unlink
-  $ bluebird plugins:remove
-
-EXAMPLES
-  $ bluebird plugins:remove myplugin
-```
-
-## `bluebird plugins:reset`
-
-Remove all user-installed and linked plugins.
-
-```
-USAGE
-  $ bluebird plugins:reset [--hard] [--reinstall]
-
-FLAGS
-  --hard       Delete node_modules and package manager related files in addition to uninstalling plugins.
-  --reinstall  Reinstall all plugins after uninstalling.
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/reset.ts)_
-
-## `bluebird plugins:uninstall [PLUGIN]`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ bluebird plugins:uninstall [PLUGIN...] [-h] [-v]
-
-ARGUMENTS
-  PLUGIN...  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ bluebird plugins:unlink
-  $ bluebird plugins:remove
-
-EXAMPLES
-  $ bluebird plugins:uninstall myplugin
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/uninstall.ts)_
-
-## `bluebird plugins:unlink [PLUGIN]`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ bluebird plugins:unlink [PLUGIN...] [-h] [-v]
-
-ARGUMENTS
-  PLUGIN...  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ bluebird plugins:unlink
-  $ bluebird plugins:remove
-
-EXAMPLES
-  $ bluebird plugins:unlink myplugin
-```
-
-## `bluebird plugins:update`
-
-Update installed plugins.
-
-```
-USAGE
-  $ bluebird plugins:update [-h] [-v]
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Update installed plugins.
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.17/src/commands/plugins/update.ts)_
 <!-- commandsstop -->
