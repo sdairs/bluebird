@@ -1,18 +1,19 @@
 {
   "name": "@sdairs/bluebird",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "Bluebird CLI for streaming data to various data services",
   "type": "module",
   "exports": "./dist/index.js",
+  "bin":  "./bin/run",
   "engines": {
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && shx cp bin/run.js bin/run",
     "clean": "shx rm -rf dist",
     "lint": "eslint . --ext .ts",
     "postpack": "shx rm -f oclif.manifest.json",
-    "prepack": "npm run build && oclif manifest",
+    "prepack": "npm run build && oclif manifest && shx cp bin/run.js bin/run",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },

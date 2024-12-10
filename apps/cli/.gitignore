@@ -2,6 +2,7 @@
 *-error.log
 **/.DS_Store
 /.idea
+/dist
 /tmp
 /node_modules
 oclif.manifest.json
