@@ -14,6 +14,7 @@ jobs:
           node-version: latest
       - uses: pnpm/action-setup@v4
       - run: pnpm install
+      - run: pnpm run build
       - uses: JS-DevTools/npm-publish@19c28f1ef146469e409470805ea4279d47c3d35c
         with:
           package: apps/cli
