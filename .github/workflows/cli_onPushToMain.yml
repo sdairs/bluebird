@@ -1,47 +1,27 @@
 # test
-name: CLI - Version, Tag and Release
+name: version, tag and github release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to release (leave empty to use package.json version)'
-        required: false
-        type: string
   push:
     branches: [main]
-    paths:
-      - 'apps/cli/**'
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
       - uses: actions/setup-node@v4
+      - run: cd apps/cli
       - name: Check if version already exists
         id: version-check
         run: |
-          cd apps/cli
-          if [ -n "${{ inputs.version }}" ]; then
-            package_version="${{ inputs.version }}"
-          else
-            package_version=$(node -p "require('./package.json').version")
-          fi
+          package_version=$(node -p "require('./package.json').version")
           exists=$(gh api repos/${{ github.repository }}/releases/tags/v$package_version >/dev/null 2>&1 && echo "true" || echo "")
 
           if [ -n "$exists" ];
           then
             echo "Version v$package_version already exists"
-            echo "::warning file=apps/cli/package.json,line=1::Version v$package_version already exists - no release will be created. If you want to create a new release, please update the version in package.json and push again."
+            echo "::warning file=package.json,line=1::Version v$package_version already exists - no release will be created. If you want to create a new release, please update the version in package.json and push again."
             echo "skipped=true" >> $GITHUB_OUTPUT
           else
             echo "Version v$package_version does not exist. Creating release..."
@@ -59,7 +39,6 @@ jobs:
         if: ${{ steps.version-check.outputs.skipped == 'false' }}
         id: oclif-readme
         run: |
-          cd apps/cli
           pnpm install
           pnpm exec oclif readme
           if [ -n "$(git status --porcelain)" ]; then
