@@ -64,9 +64,7 @@ import { Destination } from '../base.js';
 import { Event } from '../../lib/types.js';
 
 interface MyDestinationConfig {
-  token: string;
-  endpoint: string;
-  stream: string;
+  someConfig: string
 }
 
 export class MyDestination extends Destination {
