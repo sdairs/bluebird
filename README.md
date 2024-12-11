@@ -49,25 +49,39 @@ The CLI is built with [oclif](https://oclif.io).
 
 Add a new directory under `src/destinations`, e.g., `src/destinations/my_destination`.
 
-Create your destination class, e.g., `src/destinations/my_destination/my_destination.js`. This must export a class that extends `Destination`.
+Create your destination class, e.g., `src/destinations/my_destination/my_destination.ts`. This must export a class that extends `Destination` from `src/destinations/base.ts`.
 
-There are two methods you can override, `initialize` and `processBatch`.
+There are two methods you can override, `init` and `send`.
 
-- `initialize`: **optional** - called once when the destination is first created
-- `processBatch`: **required** - called every time a batch is ready to be processed. This is where you should handle sending events to the downstream destination.
+- `init`: **optional** - called once when the destination is first created
+- `send`: **required** - called every time a batch is ready to be processed. This is where you should handle sending events to the downstream destination.
 
 
 Here's the template to start from:
 
 ```
-import { Destination } from '../destination.js'
+import { Destination } from '../base.js';
+import { Event } from '../../lib/types.js';
 
-export class TinybirdDestination extends Destination {
-  constructor() {
-    super()
+interface MyDestinationConfig {
+  token: string;
+  endpoint: string;
+  stream: string;
+}
+
+export class MyDestination extends Destination {
+  private config: MyDestinationConfig;
+
+  constructor(config: MyDestinationConfig) {
+    super();
+    this.config = config;
   }
 
-  async processBatch(events) {
+  async init(): Promise<void> {
+
+  }
+
+  async send(events: Event[]): Promise<void> {
 
   }
 }
@@ -75,12 +89,38 @@ export class TinybirdDestination extends Destination {
 
 ### Adding the destination to the CLI start command
 
-Add the new destination to the `start` command in `src/commands/start/index.js`.
+Add the new destination as a subcommandto the `start` topic. Create a new file in `src/commands/start/` named after your destination, e.g., `src/commands/start/my_destination.ts`.
 
-1. Add example usage in the examples array
-2. Add your destination to the `args` object
-3. Add any flags to the `flags` object
-4. Add your destination to the destination switch in `run()`
+Here's the template to start from:
+
+```
+import { Flags } from '@oclif/core';
+import { BaseStartCommand } from './base.js';
+import { MyDestination } from '../../destinations/my_destination/my_destination.js';
+import { Destination } from '../../destinations/base.js';
+
+export default class StartMyDestination extends BaseStartCommand<typeof StartMyDestination> {
+  static description = 'Send the Bluebird feed to My Destination';
+
+  static examples = [
+    '<%= config.bin %> <%= command.id %> --some-config XXX',
+  ];
+
+  static flags = {
+    someConfig: Flags.string({
+      description: 'Some flag',
+      char: 'c',
+      required: true,
+    }),
+  };
+
+  protected createDestination(flags: Record<string, any>): Destination {
+    return new MyDestination({
+      someConfig: flags.someConfig
+    });
+  }
+}
+```
 
 ### Building the CLI for dev
 
