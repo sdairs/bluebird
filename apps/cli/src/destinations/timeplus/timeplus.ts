@@ -24,21 +24,28 @@ export class TimeplusDestination extends Destination {
     super();
     this.config = config;
   }
+  
+  getAuthHeaderValue(): string {
+    let auth: string = `ApiKey ${this.config.token}`;
+    if (this.config.token.length !== 60) {
+      auth = `Basic ${Buffer.from(this.config.token).toString('base64')}`;
+    }
+
+    return auth;
+  }
 
   async init(): Promise<void> {
     // validate the 3 inputs and create the stream if not exists
     const url = `${this.config.endpoint}/api/v1beta2/streams/${this.config.stream}`;
-    let auth: string = `ApiKey ${this.config.token}`;
 
     if (this.config.token.length === 60) {
       console.log(`Validating API token for ${this.config.endpoint}`);
     } else {
       console.log('This is not an API token. Assuming it is admin:password, encoding it as base64 and validating');
-      auth = `Basic ${Buffer.from(this.config.token).toString('base64')}`;
     }
 
     const headers: HeadersInit = {
-      Authorization: auth,
+      Authorization: this.getAuthHeaderValue(),
       'Content-Type': 'application/json',
     };
 
@@ -95,7 +102,7 @@ export class TimeplusDestination extends Destination {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        Authorization: `ApiKey ${this.config.token}`,
+        Authorization: this.getAuthHeaderValue(),
         'Content-Type': 'application/json',
       },
       body: jsonl,
