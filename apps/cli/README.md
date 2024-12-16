@@ -20,7 +20,7 @@ $ npm install -g @sdairs/bluebird
 $ bluebird COMMAND
 running command...
 $ bluebird (--version)
-@sdairs/bluebird/1.0.9 linux-x64 node-v18.20.5
+@sdairs/bluebird/1.0.10 linux-x64 node-v18.20.5
 $ bluebird --help [COMMAND]
 USAGE
   $ bluebird COMMAND
@@ -124,7 +124,7 @@ EXAMPLES
 
 ## `bluebird start timeplus`
 
-Start the timeplus feed
+Start the Timeplus feed
 
 ```
 USAGE
@@ -137,7 +137,7 @@ FLAGS
       --token=<value>     (required) Timeplus token
 
 DESCRIPTION
-  Start the timeplus feed
+  Start the Timeplus feed
 
 EXAMPLES
   $ bluebird start timeplus timeplus --stream bluebird_feed --token XXX --endpoint https://us-west-2.timeplus.cloud/myworkspace
