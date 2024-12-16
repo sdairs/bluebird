@@ -4,7 +4,7 @@ import { TimeplusDestination } from '../../destinations/timeplus/timeplus.js'
 import { Destination } from '../../destinations/base.js'
 
 export default class StartTimeplus extends BaseStartCommand<typeof StartTimeplus> {
-  static description = 'Start the timeplus feed'
+  static description = 'Start the Timeplus feed'
 
   static examples = [
     '<%= config.bin %> <%= command.id %> timeplus --stream bluebird_feed --token XXX --endpoint https://us-west-2.timeplus.cloud/myworkspace',
