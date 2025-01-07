@@ -6,8 +6,10 @@ name: Docker
 # documentation.
 
 on:
-  release:
-    types: [released]
+  workflow_run:
+    workflows: ["publish"]
+    types:
+      - completed
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -15,11 +17,10 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
 
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}  # Only runs if 'Publish' workflow was successful
 
     steps:
       - name: Checkout repository
@@ -67,3 +68,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            VERSION=${{ steps.meta.outputs.tags }}
