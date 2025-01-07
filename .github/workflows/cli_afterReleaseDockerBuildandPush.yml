@@ -1,4 +1,4 @@
-name: Docker
+name: publish docker image
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -23,6 +23,18 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}  # Only runs if 'Publish' workflow was successful
 
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v4
+      - name: Check if version already exists
+        id: version-check
+        working-directory: apps/cli
+        run: |
+          package_version=$(node -p "require('./package.json').version")
+
+          echo "Creating docker image for version=$package_version ..."
+          echo "version=$package_version" >> $GITHUB_OUTPUT
+ 
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -64,9 +76,9 @@ jobs:
           context: apps/cli
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version-check.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            VERSION=${{ steps.meta.outputs.tags }}
+            VERSION=${{ steps.version-check.outputs.version }}
