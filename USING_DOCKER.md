@@ -126,7 +126,7 @@ services:
         condition: service_healthy
         
   bluebird:
-    image: trivadis/bluebird:latest
+    image: ghcr.io/sdairs/bluebird:latest
     container_name: bluebird
     environment:
       DESTINATION: kafka
