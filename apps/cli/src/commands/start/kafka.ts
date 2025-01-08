@@ -66,9 +66,9 @@ export default class StartKafka extends BaseStartCommand<typeof StartKafka> {
 
     if (flags['sasl-mechanism'] !== undefined) {
       config.sasl = {
-      mechanism: flags['sasl-mechanism'].toLowerCase(),
-      username: flags.username,
-      password: flags.password,
+        mechanism: flags['sasl-mechanism'].toLowerCase(),
+        username: flags.username,
+        password: flags.password,
       };
     }
 
