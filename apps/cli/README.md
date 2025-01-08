@@ -20,7 +20,7 @@ $ npm install -g @sdairs/bluebird
 $ bluebird COMMAND
 running command...
 $ bluebird (--version)
-@sdairs/bluebird/1.0.10 linux-x64 node-v18.20.5
+@sdairs/bluebird/1.0.11 linux-x64 node-v20.18.1
 $ bluebird --help [COMMAND]
 USAGE
   $ bluebird COMMAND
@@ -103,7 +103,7 @@ FLAGS
   -b, --brokers=<value>          (required) Kafka brokers (comma-separated)
   -c, --client-id=<value>        [default: bluebird-producer] Kafka client ID
   -c, --cursor=<value>           Cursor (Unix microseconds)
-  -m, --sasl-mechanism=<option>  [default: plain] SASL mechanism
+  -m, --sasl-mechanism=<option>  SASL mechanism
                                  <options: plain|scram-sha-256|scram-sha-512>
   -n, --batch-size=<value>       [default: 921600] Maximum batch size in bytes
   -p, --password=<value>         SASL password
