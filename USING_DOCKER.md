@@ -79,7 +79,7 @@ The following environment variables are supported
 
 The environment variable style allows to easily run bluebird as part of a docker compose stack.
 
-For example to easily start Kafka, AKHQ and have bluebird sending messages to kafka, you could use the following `docker-compose.yml`. 
+For example to easily start Kafka, AKHQ (a Kafka UI) with  bluebird sending messages to kafka, you could use the following `docker-compose.yml`. 
 
 ```yaml
 services:
