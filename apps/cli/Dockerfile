@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a base image
-FROM node:18-slim
+FROM node:23-slim
 
 ARG VERSION=latest
 
