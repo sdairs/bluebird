@@ -42,7 +42,6 @@ export default class StartKafka extends BaseStartCommand<typeof StartKafka> {
     'sasl-mechanism': Flags.string({
       description: 'SASL mechanism',
       options: ['plain', 'scram-sha-256', 'scram-sha-512'],
-      default: 'plain',
       char: 'm',
       dependsOn: ['username', 'password'],
     }),
@@ -54,7 +53,7 @@ export default class StartKafka extends BaseStartCommand<typeof StartKafka> {
     ssl: Flags.boolean({
       description: 'Enable SSL',
       char: 's',
-      default: true,
+      default: false,
     }),
   };
 
@@ -62,14 +61,18 @@ export default class StartKafka extends BaseStartCommand<typeof StartKafka> {
     const config: KafkaConfig = {
       brokers: flags.brokers.split(','),
       clientId: flags['client-id'],
-      sasl: {
-        mechanism: flags['sasl-mechanism'].toLowerCase(),
-        username: flags.username,
-        password: flags.password,
-      },
       ssl: flags.ssl,
+    };
+
+    if (flags['sasl-mechanism'] !== undefined) {
+      config.sasl = {
+      mechanism: flags['sasl-mechanism'].toLowerCase(),
+      username: flags.username,
+      password: flags.password,
+      };
     }
 
     return new KafkaDestination(config, flags.topic);
   }
+
 }
