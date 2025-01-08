@@ -11,14 +11,20 @@ Bluebird is a CLI that consumes the Bluesky firehose and sends it to a downstrea
 
 ## Usage
 
-You can use `npx` (or `pnpm dlx`) to run the CLI without installing it.
+You can use `npx` (or `pnpm dlx`) to run the CLI without installing it. 
 
 Or use `npm install -g @sdairs/bluebird` to install it globally.
+
+Alternatively you can use the provided docker image `ghcr.io/sdairs/bluebird:latest` to run it. You can either pass arguments on the command line (shown below) or use environment variables to control the behavior. See [documentation here](USING_DOCKER.md) for more details.
 
 ### Tinybird
 
 ```
 npx @sdairs/bluebird start tinybird --token e.XXX --endpoint https://api.tinybird.co --datasource bluebird_feed
+```
+
+```
+docker run --rm ghcr.io/sdairs/bluebird:latest start tinybird --token e.XXX --endpoint https://api.tinybird.co --datasource bluebird_feed
 ```
 
 ### Kafka
@@ -27,10 +33,18 @@ npx @sdairs/bluebird start tinybird --token e.XXX --endpoint https://api.tinybir
 npx @sdairs/bluebird start kafka --brokers broker:9092 --topic bluebird --username user --password pass --sasl-mechanism scram-sha-512 --batch-size 819200
 ```
 
+```
+docker run --rm ghcr.io/sdairs/bluebird:latest start kafka --brokers broker:9092 --topic bluebird --username user --password pass --sasl-mechanism scram-sha-512 --batch-size 819200
+```
+
 ### ClickHouse
 
 ```
 npx @sdairs/bluebird start clickhouse --url http://localhost:8123 --database default --table bluebird
+```
+
+```
+docker run --rm ghcr.io/sdairs/bluebird:latest start clickhouse --url http://localhost:8123 --database default --table bluebird
 ```
 
 ### Timeplus
@@ -39,6 +53,10 @@ You can create a free account at https://us-west-2.timeplus.cloud, then follow t
 
 ```
 npx @sdairs/bluebird start timeplus --token XXX --endpoint https://us-west-2.timeplus.cloud/ws_id --stream bluebird
+```
+
+```
+docker run --rm ghcr.io/sdairs/bluebird:latest start timeplus --token XXX --endpoint https://us-west-2.timeplus.cloud/ws_id --stream bluebird
 ```
 
 ## CLI development
